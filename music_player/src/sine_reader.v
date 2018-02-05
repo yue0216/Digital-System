@@ -1,0 +1,20 @@
+module sine_reader(step_size,clk,generate_next_sample,reset,sample_out,new_sample_ready);
+  input [19:0] step_size;
+  input clk;
+  input generate_next_sample;
+  input reset;
+  output wire [15:0]sample_out;
+  output wire new_sample_ready;
+  wire [21:0] sum;
+  wire [21:0] raw_addr;
+  assign sum={2'b00+step_size}+raw_addr;
+  D_FFRE #(22)  D_FFRE1(.d(sum),.en(generate_next_sample),.r(reset),.clk(clk),.q(raw_addr));
+   wire [9:0]rom_addr;
+  address address(.raw_addr(raw_addr),.rom_addr(rom_addr));
+  wire [15:0] raw_data;
+  sine_rom  sine_rom(.clk(clk),.dout(raw_data),.addr(rom_addr));
+  wire [15:0] sample;
+	data data(.raw_addr(raw_addr[21]),.raw_data(raw_data),.sample(sample));
+  D_FFRE #(16)  D_FFRE2(.d(sample),.en(generate_next_sample),.clk(clk),.q(sample_out));
+  D_FF  #(1) D_FF(.d(generate_next_sample),.clk(clk),.q(new_sample_ready)); 
+endmodule

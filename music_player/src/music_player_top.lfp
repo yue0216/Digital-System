@@ -1,0 +1,9 @@
+# begin LFP file F:\3120102053\lab21_201302\src\music_player_top.lfp
+designfile music_player_top.v
+parttype xc2vp30-7-ff896
+bus_delimiter 0;
+set_busdelim_onsave 1;
+IO_GROUP "song_led" IO_GROUP="music_player_top" ;
+INST "music_player_top" COLOR=15  ;
+NET "song_led<1>" IO_GROUP="song_led"  ;
+NET "song_led<0>" IO_GROUP="song_led"  ;
